@@ -1,0 +1,61 @@
+<form class="form-horizontal" onsubmit="return false;">
+    <legend>{{ _('General Options') }}</legend>
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label">{{ _('Current State') }}</label>
+            <div class="controls">
+                <div class="input-prepend input-append">
+                    <button class="btn btn-danger span6" data-bind="
+                        disable: isEnabled,
+                        css: {disabled: isEnabled},
+                        click: function () { enabled(true); }
+                    ">{{ _('Enable') }}</button>
+
+                    <button class="btn btn-primary span6" data-bind="
+                        disable: isDisabled,
+                        css: {disabled: isDisabled},
+                        click: function () { enabled(false); }
+                    ">{{ _('Disable') }}</button>
+                </div>
+                <div class="help-block" data-bind="visible: isEnabled">
+                    {{ _('<b>Warning:</b> The printer will be powered off after the next print finishes.') }}
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{{ _('Power Off Script') }}</label>
+            <div class="controls">
+                <input type="text" data-bind="value: powerOffScript">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{{ _('State On Startup') }}</label>
+            <div class="controls">
+                <select data-bind="value: _selectedStateAfterStartup, options: stateOptions"></select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{{ _('State On Print Start') }}</label>
+            <div class="controls">
+                <select data-bind="value: _selectedStateAfterPrintStart, options: stateOptions"></select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{{ _('State On Print End') }}</label>
+            <div class="controls">
+                <select data-bind="value: _selectedStateAfterPrintDone, options: stateOptions"></select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{{ _('Behaviour') }}</label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" data-bind="checked: powerOffOnDone"> {{ _('Power Off on Print Success') }}
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" data-bind="checked: powerOffOnFail"> {{ _('Power Off on Print Failure') }}
+                </label>
+            </div>
+        </div>
+    </fieldset>
+</form>

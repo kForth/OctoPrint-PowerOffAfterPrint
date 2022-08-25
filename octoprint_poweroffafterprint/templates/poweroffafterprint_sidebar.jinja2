@@ -1,0 +1,18 @@
+<div class="row-fluid">
+    <div class="input-prepend input-append span12">
+        <button class="btn btn-danger span6" data-bind="
+            disable: isEnabled,
+            css: {disabled: isEnabled},
+            click: function () { setEnabled(true); }
+        ">{{ _('Enable') }}</button>
+
+        <button class="btn btn-primary span6" data-bind="
+            disable: isDisabled,
+            css: {disabled: isDisabled},
+            click: function () { setEnabled(false); }
+        ">{{ _('Disable') }}</button>
+    </div>
+    <div data-bind="visible: isEnabled">
+        {{ _('<b>Warning:</b> The printer will be powered off after the next print finishes.') }}
+    </div>
+</div>

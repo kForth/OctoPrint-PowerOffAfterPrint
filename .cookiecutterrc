@@ -1,0 +1,15 @@
+plugin_title: PowerOffAfterPrint
+plugin_identifier: poweroffafterprint
+plugin_package: octoprint_poweroffafterprint
+plugin_name: OctoPrint-PowerOffAfterPrint
+repo_name: OctoPrint-PowerOffAfterPrint
+repo_branch: main
+full_name: Kestin Goforth
+email: kgoforth1503@gmail.com
+github_username: kforth
+plugin_version: 1.0.0
+plugin_description: Automatically power off your 3d printer when a print is finished.
+plugin_license: AGPLv3
+plugin_homepage: https://github.com/kforth/OctoPrint-PowerOffAfterPrint
+plugin_source: https://github.com/kforth/OctoPrint-PowerOffAfterPrint
+plugin_installurl: https://github.com/kforth/OctoPrint-PowerOffAfterPrint/archive/main.zip
