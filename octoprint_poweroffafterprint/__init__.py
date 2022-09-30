@@ -1,11 +1,3 @@
-### (Don't forget to remove me)
-# This is a basic skeleton for your plugin's __init__.py. You probably want to adjust the class name of your plugin
-# as well as the plugin mixins it's subclassing from. This is really just a basic skeleton to get you started,
-# defining your plugin as a template plugin, settings and asset plugin. Feel free to add or remove mixins
-# as necessary.
-#
-# Take a look at the documentation on what other plugin mixins are available.
-
 import octoprint.plugin
 from octoprint.events import Events
 
@@ -30,6 +22,7 @@ class PowerOffAfterPrintPlugin(
         self._powerOffScript = defaults["powerOffScript"]
         self._powerOffOnDone = defaults["powerOffOnDone"]
         self._powerOffOnFail = defaults["powerOffOnFail"]
+        self._powerOffOnCancel = defaults["powerOffOnCancel"]
         self._stateAfterStartup = defaults["stateAfterStartup"]
         self._stateAfterPrintStart = defaults["stateAfterPrintStart"]
         self._stateAfterPrintDone = defaults["stateAfterPrintDone"]
@@ -38,6 +31,7 @@ class PowerOffAfterPrintPlugin(
     def _power_off(self, event):
         self._logger.warn("Power Off Printer on %s: %s", event, self._powerOffScript)
         self._printer.commands([self._powerOffScript])
+        self._printer.disconnect()
 
     def _update_client_settings(self):
         self._plugin_manager.send_plugin_message(
@@ -47,6 +41,7 @@ class PowerOffAfterPrintPlugin(
                     "powerOffScript": self._powerOffScript,
                     "powerOffOnDone": self._powerOffOnDone,
                     "powerOffOnFail": self._powerOffOnFail,
+                    "powerOffOnCancel": self._powerOffOnCancel,
                     "stateAfterStartup": self._stateAfterStartup,
                     "stateAfterPrintStart": self._stateAfterPrintStart,
                     "stateAfterPrintDone": self._stateAfterPrintDone,
@@ -62,6 +57,7 @@ class PowerOffAfterPrintPlugin(
             "powerOffScript": "M81",
             "powerOffOnDone": True,
             "powerOffOnFail": True,
+            "powerOffOnCancel": False,
             "stateAfterStartup": State.DISABLED,
             "stateAfterPrintStart": State.UNCHANGED,
             "stateAfterPrintDone": State.DISABLED,
@@ -77,6 +73,7 @@ class PowerOffAfterPrintPlugin(
         self._powerOffScript = self._settings.get(["powerOffScript"])
         self._powerOffOnDone = self._settings.getBoolean(["powerOffOnDone"])
         self._powerOffOnFail = self._settings.getBoolean(["powerOffOnFail"])
+        self._powerOffOnCancel = self._settings.getBoolean(["powerOffOnCancel"])
         self._stateAfterStartup = self._settings.getBoolean(["stateAfterStartup"])
         self._stateAfterPrintStart = self._settings.getBoolean(["stateAfterPrintStart"])
         self._stateAfterPrintDone = self._settings.getBoolean(["stateAfterPrintDone"])
@@ -86,6 +83,7 @@ class PowerOffAfterPrintPlugin(
         self._settings.set(["powerOffScript"], self._powerOffScript)
         self._settings.setBoolean(["powerOffOnDone"], self._powerOffOnDone)
         self._settings.setBoolean(["powerOffOnFail"], self._powerOffOnFail)
+        self._settings.setBoolean(["powerOffOnCancel"], self._powerOffOnCancel)
         self._settings.setBoolean(["stateAfterStartup"], self._stateAfterStartup)
         self._settings.setBoolean(["stateAfterPrintStart"], self._stateAfterPrintStart)
         self._settings.setBoolean(["stateAfterPrintDone"], self._stateAfterPrintDone)
@@ -144,7 +142,10 @@ class PowerOffAfterPrintPlugin(
                     if self._powerOffOnDone:
                         self._power_off(event)
                 else:  # event == Events.PRINT_FAILED:
-                    if self._powerOffOnFail:
+                    if self._powerOffOnCancel:
+                        if payload.get("reason", False) == "cancelled":
+                            self._power_off(event)
+                    elif self._powerOffOnFail:
                         self._power_off(event)
 
             if self._stateAfterPrintDone != State.UNCHANGED:

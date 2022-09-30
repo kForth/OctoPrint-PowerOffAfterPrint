@@ -18,6 +18,7 @@ $(function () {
         self.powerOffScript = ko.observable(undefined);
         self.powerOffOnDone = ko.observable(undefined);
         self.powerOffOnFail = ko.observable(undefined);
+        self.powerOffOnCancel = ko.observable(undefined);
         self.stateAfterStartup = ko.observable(undefined);
         self.stateAfterPrintStart = ko.observable(undefined);
         self.stateAfterPrintDone = ko.observable(undefined);
@@ -76,6 +77,7 @@ $(function () {
             target.powerOffScript(source.powerOffScript());
             target.powerOffOnDone(source.powerOffOnDone());
             target.powerOffOnFail(source.powerOffOnFail());
+            target.powerOffOnCancel(source.powerOffOnCancel());
             target.stateAfterStartup(source.stateAfterStartup());
             target.stateAfterPrintStart(source.stateAfterPrintStart());
             target.stateAfterPrintDone(source.stateAfterPrintDone());
